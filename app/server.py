@@ -35,7 +35,6 @@ def parse_url(url: str) -> dict:
 
     for param in query.split("&"):
         key, value = param.split("=")
-        print(key, value)
         parserd_url[key] = value
 
     return parserd_url
