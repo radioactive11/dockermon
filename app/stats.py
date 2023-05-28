@@ -5,9 +5,8 @@ import docker
 
 
 class Stats:
-    def __init__(self, container_name: str, delay: int = 1) -> None:
-        self.client = docker.from_env()
-        self.container = self.client.containers.get(container_name)
+    def __init__(self, contianer, delay: int = 1) -> None:
+        self.container = contianer
         self.delay = delay
 
     def __cpu_percent(self, cpu_stats: dict, precpu_stats: dict) -> float:
