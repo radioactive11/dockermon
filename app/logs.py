@@ -1,10 +1,10 @@
 import docker
+from docker import DockerClient
 
 
 class Logs:
-    def __init__(self, container_name: str) -> None:
-        self.client = docker.from_env()
-        self.container = self.client.containers.get(container_name)
+    def __init__(self, container) -> None:
+        self.container = container
 
     def stream_logs(self, delay: int = 1):
         for line in self.container.logs(stream=True, follow=True, tail=delay):
