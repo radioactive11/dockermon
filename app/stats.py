@@ -21,14 +21,25 @@ class Stats:
         """
         cpu_count = cpu_stats.get("online_cpus", 0)
         cpu_percent = 0.0
-        cpu_delta = float(cpu_stats["cpu_usage"]["total_usage"]) - float(
-            precpu_stats["cpu_usage"]["total_usage"]
-        )
-        system_delta = float(cpu_stats["system_cpu_usage"]) - float(
-            precpu_stats["cpu_usage"]["total_usage"]
-        )
+
+        cpu_total_usage = cpu_stats.get("cpu_usage", {}).get("total_usage", 0)
+        precpu_total_usage = precpu_stats.get("cpu_usage", {}).get("total_usage", 0)
+        system_cpu_usage = cpu_stats.get("system_cpu_usage", 0)
+        precpu_system_cpu_usage = precpu_stats.get("system_cpu_usage", 0)
+
+        cpu_delta = float(cpu_total_usage) - float(precpu_total_usage)
+        system_delta = float(system_cpu_usage) - float(precpu_system_cpu_usage)
+
+        # cpu_delta = float(cpu_stats["cpu_usage"]["total_usage"]) - float(
+        #     precpu_stats["cpu_usage"]["total_usage"]
+        # )
+
+        # system_delta = float(cpu_stats["system_cpu_usage"]) - float(
+        #     precpu_stats["system_cpu_usage"]
+        # )
+
         if system_delta > 0.0:
-            cpu_percent = cpu_delta / system_delta * 100.0 * cpu_count
+            cpu_percent = (cpu_delta / system_delta) * 100.0 * cpu_count
         return cpu_percent
 
     def __blkio_bytes(self, blkio_stats: dict) -> tuple[int, int]:
@@ -67,6 +78,14 @@ class Stats:
 
         cpu_data = stats.get("cpu_stats", {})
         precpu_data = stats.get("precpu_stats", {})
+
+        print("=====================================")
+
+        print(cpu_data)
+        print(precpu_data)
+
+        print("=====================================")
+
         cpu_percent: float = self.__cpu_percent(cpu_data, precpu_data)
 
         memory_data: dict = stats.get("memory_stats", {})
