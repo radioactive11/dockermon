@@ -27,8 +27,18 @@ class Stats:
         system_cpu_usage = cpu_stats.get("system_cpu_usage", 0)
         precpu_system_cpu_usage = precpu_stats.get("system_cpu_usage", 0)
 
-        cpu_delta = float(cpu_total_usage) - float(precpu_total_usage)
-        system_delta = float(system_cpu_usage) - float(precpu_system_cpu_usage)
+        cpu_delta = 0.0
+        system_delta = 0.0
+
+        if precpu_total_usage > 0.0:
+            cpu_delta = (
+                float(cpu_total_usage) - float(precpu_total_usage)
+            ) / precpu_total_usage
+
+        if precpu_system_cpu_usage > 0.0:
+            system_delta = (
+                float(system_cpu_usage) - float(precpu_system_cpu_usage)
+            ) / precpu_system_cpu_usage
 
         # cpu_delta = float(cpu_stats["cpu_usage"]["total_usage"]) - float(
         #     precpu_stats["cpu_usage"]["total_usage"]
